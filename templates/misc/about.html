@@ -1,0 +1,45 @@
+ 
+ {% extends "_base.html" %}
+ {% load static %}
+ {% block extracss %}
+	<link rel="stylesheet" href="{% static 'css/about_page.css' %}">
+ {% endblock extracss %}
+
+
+
+{% block title %}Pasal About{% endblock title %}
+
+{% block content %}
+ <section class="about_section mt-5">
+    <div class="container-fluid  ">
+      <div class="row">
+        <div class="col-md-5 ml-auto">
+          <div class="detail-box pr-md-3">
+            <div class="heading_container">
+              <h2>
+                We Provide Best Deal For You
+              </h2>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus nemo ratione ullam quia quos mollitia maxime ipsam laudantium deserunt, repudiandae vel quo explicabo eaque fugiat molestias numquam dolor optio exercitationem?
+            </p>
+            <a href="{% url 'books:book-list' %}">
+              Find Best Books For You
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6 px-0">
+          <div class="img-box">
+            <img src="{% static 'img/second-hand-book.jpg' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}
+
+
+
+
+

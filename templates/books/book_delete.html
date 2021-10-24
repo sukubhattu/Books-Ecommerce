@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+{% block title %}List Book{% endblock title %}
+{% block content %}
+    <div class="">
+			<h1>Do you really want to delete <em>{{object}} </em>?</h1>
+			<form method="POST">
+				{% csrf_token %}
+				{{form.as_p}}
+				<div class="mt-3">
+					<button type="submit" class="btn btn-outline-danger mr-3">Yes Delete</button>
+					<a class="btn btn-primary" href="{% url 'books:book-detail' object.id%}">Cancel</a>
+				</div>
+			</form>
+    </div>
+{% endblock content %}

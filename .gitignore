@@ -1,0 +1,8 @@
+db.sqlite3
+db.sqlite3-journal
+migrations/
+__pycache__/
+
+myenv/
+media/
+init.sh

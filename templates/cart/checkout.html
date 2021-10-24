@@ -1,0 +1,81 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Checkout{% endblock title %} {% block content %}
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="box-element" id="form-wrapper">
+			<h2 class="mt-3 header-text mb-4">
+				Payment 
+			</h2>
+			
+			<p>Total: {{order.get_cart_total|floatformat:2}}</p>
+			{% comment %} <p><em>*** 10 AUD is charged for shipping</em></p> {% endcomment %}
+			{% if order.get_cart_item >= 1 %}
+				<input type="button" class="btn btn-success btn-block mt-4" id="stripeSubmitBtn" value="Pay Now"></input>
+				{% else %}
+				<input type="button" class="btn btn-success btn-block mt-4" id="stripeSubmitBtn" value="Pay Now" disabled></input>
+			{% endif %}
+			
+			{% comment %} <button class="btn btn-success btn-block mt-4" id="stripePayoutBtn">Receive with Stripe</button> {% endcomment %}
+			{% comment %} <form method="POST">
+				{%csrf_token %}
+				{{form|crispy}}
+				<input type="submit" class="btn btn-success btn-block mt-4" value="Submit your detail">
+			</form> {% endcomment %}
+			{% comment %} <form id="form">
+				<div id="shipping-info">
+					<div class="form-field">
+						<input class="form-control" type="text" name="address" placeholder="Address.." />
+					</div>
+					<div class="form-field">
+						<input class="form-control" type="text" name="city" placeholder="City.." />
+					</div>
+					<div class="form-field">
+						<input class="form-control" type="text" name="state" placeholder="State.." />
+					</div>
+					<div class="form-field">
+						<input class="form-control" type="text" name="zipcode" placeholder="Zip code.." />
+					</div>
+					<div class="form-field">
+						<input class="form-control" type="text" name="country" placeholder="Zip code.." />
+					</div>
+				</div>
+				<input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue" />
+			</form> {% endcomment %}
+		</div>
+		</div>
+		<div class="col-lg-6">
+			<h2 class="mt-3 header-text mb-4">
+				Your order summary
+			</h2>
+			<a href="{% url 'cart:cart' %}"><button class="btn btn-dark mb-4">Back to Cart</button></a>
+			<table class="table table-hover ">
+				<thead>
+					<tr>
+						<th scope="col">SN</th>
+						<th scope="col">Book Cover</th>
+						<th scope="col">Book Name</th>
+						<th scope="col">Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+						<tr>
+							<td>{{forloop.counter}}</td>
+							<td><img src="{{ item.book.cover_URL }}" alt="" style="width: 80px; height:80px"></td>
+							<td>{{item.book.name}}</td>
+							<td>{{item.get_total|floatformat:2}}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block extrajs %}
+	<script src="{% static 'js/cart.js' %}"></script>
+{% endblock extrajs %}

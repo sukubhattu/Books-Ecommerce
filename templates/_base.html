@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% load static %}
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{% block title %}Bookstore{% endblock title %}</title>
+		<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/jquery.toast.min.css' %}" />
+		<!-- fonts style -->
+		<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		{% block extracss %}{% endblock extracss %}
+	</head>
+	<body>
+		{% include 'partials/_nav.html' %}
+		
+		<div class="container">{% block content %} {% endblock content %}</div>
+		{% include 'partials/_footer.html' %}
+
+		<script type="text/javascript">
+			var user = '{{request.user}}';
+			function getCookie(name) {
+				// Split cookie string and get all individual name=value pairs in an array
+				var cookieArr = document.cookie.split(';');
+
+				// Loop through the array elements
+				for (var i = 0; i < cookieArr.length; i++) {
+					var cookiePair = cookieArr[i].split('=');
+
+					/* Removing whitespace at the beginning of the cookie name
+			       and compare it with the given string */
+					if (name == cookiePair[0].trim()) {
+						// Decode the cookie value and return
+						return decodeURIComponent(cookiePair[1]);
+					}
+				}
+				// Return null if not found
+				return null;
+			}
+			var csrftoken = getCookie('csrftoken');
+		</script>
+		<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap.js' %}"></script>
+		<script src="{% static 'js/jquery.toast.min.js' %}"></script>
+		<script src="https://js.stripe.com/v3/"></script>
+		{% block extrajs %}{% endblock extrajs %}
+		
+		<script>
+			function fetchCartCount(){
+				$.ajax({
+					type: 'GET',
+					url: "{% url 'cart:get_cart_count' %}",
+					success: function (json_data) {
+						set_cart_count_span(json_data["number"]);
+							console.log(json_data["number"]);
+					},
+					error: function (xhr, errmsg, err) {
+					}
+				})	
+			};
+			function set_cart_count_span(count){
+				document.getElementById("cart-count").innerHTML = count;
+			}
+			if (user != "AnonymousUser"){
+				console.log(user);
+				fetchCartCount();
+			}
+
+
+			var updateBtns = document.getElementsByClassName('update-cart');
+
+			for (i = 0; i < updateBtns.length; i++) {
+				updateBtns[i].addEventListener('click', function () {
+					var productId = this.dataset.product;
+					var action = this.dataset.action;
+					// console.log('productId:', productId, 'Action:', action);
+					// console.log('USER:', user);
+					updateUserOrder(productId, action);
+				});
+			}
+
+			function updateUserOrder(productId, action) {
+				console.log('User is sending data');
+				var url = '/update_item/';
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': csrftoken,
+					},
+					body: JSON.stringify({
+						productId: productId,
+						action: action,
+					}),
+				})
+					.then((response) => {
+						return response.json();
+					})
+					.then((data) => {
+						if (data['add']) {
+							console.log('trigger message');
+							$.toast('Item added to your cart');
+							fetchCartCount();
+						}
+						if (data['remove']) {
+							location.reload();
+						}
+					});
+			}
+
+		</script>
+	</body>
+</html>
+

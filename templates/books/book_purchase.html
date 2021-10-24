@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{ book.title }}{% endblock title %}
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'css/book.css' %}">
+{% endblock extracss %}
+
+{% block content %}
+	{% if book %}
+		<div class="book-detail">
+       <div class="row">
+					<div class="col-md-4">
+							<img src="{{ book.cover_URL }}" alt="{{ book.title }}" class="img-fluid">
+					</div>
+					<div class="col-md-7 offset-md-1">
+						<h1 class="header-text">{{ book.name }}</h1>
+						<p>By {{book.author }}</p>
+						<p>Price: {{ book.price }}</p>
+						<p>ISBN: {{book.isbn}}</p>
+						<p>Seller: <a href="#">{{ book.seller }}</a></p>
+						<h3 class="sub-header-text">Synopsis</h3>
+						<p>{{book.description|truncatechars:550}}</p>
+					</div>
+					</div>  
+       </div>
+			 <div class="mt-5">
+					<form method="POST">
+						{%csrf_token %}
+						<h2 class="header-text">Please fill up this form for confirming your purchase</h2>
+						{{form|crispy}}
+						<input type="submit" class="btn btn-primary mt-4" value="Submit your detail">
+					</form>
+				</div>
+				{% else %}
+				<div class="alert alert-danger">You cannot purchase your own listing !</div>
+			</div>
+    </div>
+
+	{% endif %}
+{% endblock content %}

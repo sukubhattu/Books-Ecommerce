@@ -1,0 +1,38 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #5c5b5b;
+  background-color: #ffffff;
+  overflow-x: hidden;
+}
+
+a,
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+.btn,
+.btn:focus {
+  outline: none !important;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.header-text{
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #3a4468;
+}
+
+.sub-header-text{
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #4a5b99;
+}

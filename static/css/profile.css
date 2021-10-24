@@ -1,0 +1,22 @@
+.user-profile{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.user-profile-picture{
+	padding: 20px;
+	height: 200px;
+	width: 200px;
+	background-color: rgb(189, 241, 241);
+	border-radius: 50%;
+}
+
+.book{
+	color: #3a4468;
+	font-size: 20px;
+}
+.purchase{
+	padding: 20px;
+	box-shadow:  6px -3px 63px 0px rgb(40 54 73 / 10%);
+}

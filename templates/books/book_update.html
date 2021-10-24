@@ -1,0 +1,23 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{book.name}}| Update{% endblock title %}
+{% block content %}
+<div class="row">
+	
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<div class="book-form">
+		<h2 class="mb-5">
+			Update {{book.name}}
+		</h2>
+			<form enctype="multipart/form-data" action="" method="POST">
+				{% csrf_token %}
+				{{form|crispy}}
+				<button type="submit" class="btn btn-primary mt-5">Upate Book</button>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-2"></div>
+</div>
+
+{% endblock content %}

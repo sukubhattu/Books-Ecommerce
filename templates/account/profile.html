@@ -1,0 +1,80 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock extracss %}
+
+{% block head_title %}Profile{% endblock %}
+
+{% block content %}
+  {% comment %} {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %} {% endcomment %}
+  <div class="row">
+  <div class="col-lg-12">
+    <div class="user-profile mb-5">
+     <img class="user-profile-picture" src="https://avatars.dicebear.com/api/bottts/{{user_data.user.username}}.svg">
+        <p class="mt-4">{{user.email}}</p></div>
+  </div>
+    <div class="col-lg-6">
+        {% if user_data.amount > 0 %}
+          <div class="alert alert-success" role="alert">
+            You have earned <b>{{user_data.amount|floatformat:2}} AUD</b> after selling your listing. You will be paid soon by Pasal. 
+          </div>  
+        {% endif %}
+        {% if user.paypal_email_address %}
+          <div class="alert alert-primary" role="alert">
+          Your will receive your payment in <b>{{user.paypal_email_address}}</b> paypal account.
+        </div> 
+        {% endif %}
+    </div>
+    <div class="col-lg-6">
+      <form method = "POST">
+      {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleInputEmail1">Your paypal e-mail address to receive payments</label>
+          {% if user.paypal_email_address %}
+            <input type="email" name='paypalEmail' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Change your paypal email address">
+            <input type="submit" class="btn btn-outline-primary mt-2" value="Change my email"></input>
+          {% else %}
+            <input type="email" name='paypalEmail' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your paypal email">
+            <input type="submit" class="btn btn-outline-primary" value="Submit"></input>
+          {% endif %}
+        </div>
+        
+      </form>
+    </div>
+  </div>
+  <div class="row mt-5 mb-5 text-center">
+
+    <div class="col-lg-5 purchase">
+      <h3 class="header-text mt-4">Your Listings</h3>
+      {% if user_data.listed_books %}
+        {% for book in user_data.listed_books %}
+            <p><a class="book" href="{{ book.get_absolute_url }}">{{book}}</a></p>
+        {% endfor %}
+        {% else %}
+          <div class="alert alert-warning">{{user.username }} has not uploaded any books yet.</div>
+      {% endif %}
+    </div>
+    <div class="col-lg-2"></div>
+    <div class="col-lg-5 purchase">
+      <h3 class="header-text mt-4">Your Purchases</h3>
+      {% if user_data.bought_books %}
+        {% for book in user_data.bought_books %}
+            <p><a class="book"  href="{% url 'books:book-detail' book.book_id %}">{{book.book}}</a></p>
+        {% endfor %}
+        {% else %}
+          <div class="alert alert-warning">{{user.username }} has not bought any books yet.</div>
+          
+      {% endif %}
+    </div>
+  </div>
+    
+{% endblock content %}
+

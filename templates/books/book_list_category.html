@@ -1,0 +1,81 @@
+{% extends "_base.html" %} {% load static %} {% block extracss %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+<link rel="stylesheet" href="{% static 'css/book.css' %}" />
+{% endblock extracss %} {% block title %}Books{% endblock title %} {% block content %}
+<section class="product_section layout_padding">
+	<div class="container">
+		{% if books %}
+		<div class="heading_container heading_center">
+			<h2 class="text-center mt-3 header-text">Check Out our Books</h2>
+		</div>
+		<div class="row">
+			{% for book in books %}
+			<div class="col-sm-6 col-lg-4">
+				<div class="box">
+					{% comment %} {% if book.is_sold %}
+					<span class="sold-icon badge badge-danger">sold</span>
+					{% endif %} {% endcomment %}
+					<div class="img-box">
+						<img src="{{ book.cover_URL }}" alt="" />
+						{% comment %} {% if not book.is_sold %}
+						<a href="{% url 'users:purchase' book.id %}" class="add_cart_btn">
+							<span> Buy Now </span>
+						</a>
+						{% endif %} {% endcomment %}
+						<a href="{{ book.get_absolute_url }}" class="add_cart_btn">
+							<span>
+								View Details
+							</span>
+            </a>
+					</div>
+					<div class="detail-box">
+						<h5 class="book-name">
+							<a href="{{ book.get_absolute_url }}">{{book.name}}</a>
+						</h5>
+						<div class="product_info">
+							<h5><span>$</span> {{book.price}}</h5>
+							<div class="star_container">
+								<p>Category: {{book.category}}</p>
+							</div>
+						</div>
+						{% if user.is_authenticated %}
+							<div>
+								{% if not book.is_sold %}
+									<button data-product="{{book.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+									{% else %}
+									<button class="btn btn-warning">Sold Out</button>
+								{% endif %}  
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% comment %}
+		<div class="btn_box">
+			<a href="" class="view_more-link"> View More </a>
+		</div>
+		{% endcomment %} 
+		<div class="mt-5">
+			{% if books %} {% if books.has_previous %}
+				<a class="btn btn-outline-info mb-4" href="?category={{category}}&page=1">First</a>
+				<a class="btn btn-outline-info mb-4" href="?category={{category}}&page={{ books.previous_page_number }}"
+					>Previous</a
+				>
+				{% endif %} {% for num in books.paginator.page_range %} {% if books.number == num %}
+				<a class="btn btn-info mb-4" href="?category={{category}}&page={{ num }}">{{ num }}</a>
+				{% elif num > books.number|add:'-3' and num < books.number|add:'3' %}
+				<a class="btn btn-outline-info mb-4" href="?category={{category}}&page={{ num }}">{{ num }}</a>
+				{% endif %} {% endfor %} {% if books.has_next %}
+				<a class="btn btn-outline-info mb-4" href="?category={{category}}&page={{ books.next_page_number }}">Next</a>
+				<a class="btn btn-outline-info mb-4" href="?category={{category}}&page={{ books.paginator.num_pages }}">Last</a>
+				{% endif %} {% endif %} {% else %}
+				<div class="heading_container heading_center">
+					<h2 class="text-center mt-3 header-text">Sorry there are no books available right now</h2>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock content %}

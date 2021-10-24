@@ -1,0 +1,17 @@
+.review-author{
+	color: gray;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.review-review{
+	color: #212121;
+	font-size: 16px;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+.book-name a{
+	color: #3a4468;
+	font-weight: bold;
+	font-size: 22px;
+}
